@@ -1,18 +1,18 @@
 var webpack = require('webpack');
 var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
 	entry: {
 		//When making a new page, add its js path here
-		style: './src/sass/app.scss',
-		home: './src/js/Home.js',
-		user: './src/js/User.js'
+		style1: './src/sass/app.scss',
+		home1: './src/js/Home.js',
+		user1: './src/js/User.js'
 	},
 	
 	output: {
 		path: __dirname,
-		filename: './build/js/[name]-bundle.js',
+		filename: './build/js/[name]-bundle.js'
 	},
 	watch: false,
 	devServer: {
@@ -21,8 +21,8 @@ module.exports = {
 	},
 	devtool: "source-map",
 	module: {
-		rules: [
-			{
+        rules: [
+        	{
 				test: /.jsx?$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
@@ -30,31 +30,31 @@ module.exports = {
 					presets: ['es2015', 'react']
 				}
 			},
-			{
+			{  
 				test: /\.scss$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: './build/css/screen.css'
-						}
-					},
-					{
-						loader: 'extract-loader'
-					},
-					{
-						loader: 'css-loader?-url'
-					},
-					{
-						loader: 'postcss-loader'
-					},
-					{
-						loader: 'sass-loader', options:{
-							sourceMap: true
-						}
-					}
-				]
-			}
-		]
-	}
+		        use: [
+		        	{
+			            loader: MiniCssExtractPlugin.loader
+			        },
+			        {
+			            loader: 'css-loader',
+			            options: {
+			              sourceMap: true
+			            }
+			        },
+			        {
+			            loader: 'sass-loader',
+			            options: {
+			              sourceMap: true			            }
+			        }
+		        ]
+	      	}  
+	    ]    
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "build/css/[name].css",
+            chunkFilename: "build/css/[id].css"
+        })
+    ]
 };
